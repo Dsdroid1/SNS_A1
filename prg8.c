@@ -73,6 +73,15 @@ void main(int argc, char *argv[])
             }
             // Remember to free memory for a,b,m;
             mpz_clear(M);
+            for (int i = 0; i <= idx / 3; i++)
+            {
+                mpz_clear(a[i]);
+                mpz_clear(b[i]);
+                mpz_clear(m[i]);
+            }
+            free(a);
+            free(b);
+            free(m);
         }
     }
 }
