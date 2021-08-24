@@ -331,10 +331,10 @@ int order_a_mod_m(mpz_t a, mpz_t m, mpz_t h)
         mpz_init(order_expression_value);
 
         mpz_set_ui(factor, 1);
-        mpz_sqrt(root_n, m);
+        mpz_sqrt(root_n, phi);
         int found = 0;
         // For factors from 1 to root_n
-        for (; mpz_cmp(factor, root_n) < 0 && found == 0; mpz_add_ui(factor, factor, 1))
+        for (; mpz_cmp(factor, root_n) <= 0 && found == 0; mpz_add_ui(factor, factor, 1))
         {
 
             mpz_mod(remainder, phi, factor);
@@ -397,4 +397,85 @@ int order_a_mod_m(mpz_t a, mpz_t m, mpz_t h)
 
     mpz_clear(gcd_value);
     return exists;
+}
+
+mpz_t *factor_list(mpz_t n, int *no_of_factors)
+{
+    mpz_t *list;
+
+    // Now get all factors of n itself
+    mpz_t factor, root_n, remainder;
+    mpz_init(factor);
+    mpz_init(root_n);
+    mpz_init(remainder);
+    mpz_sqrt(root_n, n);
+    mpz_set_ui(factor, 1);
+    *no_of_factors = 0;
+    mpz_t inverse_factor;
+    mpz_init(inverse_factor);
+    // First we get the count of factors, and then actually build the list
+    // For count of factors
+    for (; mpz_cmp(factor, root_n) <= 0; mpz_add_ui(factor, factor, 1))
+    {
+        mpz_mod(remainder, n, factor);
+        if (mpz_cmp_ui(remainder, 0) == 0)
+        {
+            // Factor found, increase count
+            if (mpz_cmp(factor, root_n) == 0)
+            {
+                mpz_divexact(inverse_factor, n, factor);
+                if (mpz_cmp(inverse_factor, factor) == 0)
+                {
+                    *no_of_factors = *no_of_factors + 1;
+                }
+                else
+                {
+                    // factors are factor, n/factor
+                    *no_of_factors = *no_of_factors + 2;
+                }
+            }
+            else
+            {
+                // factors are factor, n/factor
+                *no_of_factors = *no_of_factors + 2;
+            }
+        }
+    }
+    mpz_set_ui(factor, 1);
+    int ptr = 0;
+
+    list = (mpz_t *)malloc((*no_of_factors) * sizeof(mpz_t));
+    // For factors from 1 to root_n
+    for (; mpz_cmp(factor, root_n) <= 0; mpz_add_ui(factor, factor, 1))
+    {
+        mpz_mod(remainder, n, factor);
+        if (mpz_cmp_ui(remainder, 0) == 0)
+        {
+            // Factor found, append it
+            // gmp_printf("%Zd ", factor);
+            mpz_init(list[ptr]);
+            mpz_set(list[ptr], factor);
+            ptr++;
+        }
+    }
+    mpz_set(factor, root_n);
+
+    // For factors from root_n+1 to n
+    for (; mpz_cmp_ui(factor, 0) > 0; mpz_sub_ui(factor, factor, 1))
+    {
+        mpz_mod(remainder, n, factor);
+        if (mpz_cmp_ui(remainder, 0) == 0)
+        {
+            // Factor found, append it
+            mpz_divexact(inverse_factor, n, factor);
+            if (mpz_cmp(inverse_factor, root_n) != 0)
+            {
+                mpz_init(list[ptr]);
+                mpz_set(list[ptr], inverse_factor);
+                ptr++;
+            }
+            // gmp_printf("%Zd ", inverse_factor);
+        }
+    }
+    return list;
 }

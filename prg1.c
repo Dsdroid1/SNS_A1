@@ -40,9 +40,13 @@ void main(int argc, char *argv[])
             mpz_sqrt(root_n, gcd_value);
             mpz_set_ui(factor, 1);
             // For factors from 1 to root_n
-            for (; mpz_cmp(factor, root_n) < 0; mpz_add_ui(factor, factor, 1))
+            // // DEBUG
+            // gmp_printf("%Zd is root of gcd\n", root_n);
+            for (; mpz_cmp(factor, root_n) <= 0; mpz_add_ui(factor, factor, 1))
             {
                 mpz_mod(remainder, gcd_value, factor);
+                // // DEBUG
+                // gmp_printf("%Zd leads to %Zd remainder\n", factor, remainder);
                 if (mpz_cmp_ui(remainder, 0) == 0)
                 {
                     // Factor found, print it
@@ -56,11 +60,16 @@ void main(int argc, char *argv[])
             for (; mpz_cmp_ui(factor, 0) > 0; mpz_sub_ui(factor, factor, 1))
             {
                 mpz_mod(remainder, gcd_value, factor);
+                // // DEBUG
+                // gmp_printf("%Zd leads to %Zd remainder\n", factor, remainder);
                 if (mpz_cmp_ui(remainder, 0) == 0)
                 {
                     // Factor found, print it
                     mpz_divexact(inverse_factor, gcd_value, factor);
-                    gmp_printf("%Zd ", inverse_factor);
+                    if (mpz_cmp(inverse_factor, root_n) != 0)
+                    {
+                        gmp_printf("%Zd ", inverse_factor);
+                    }
                 }
             }
             mpz_clear(inverse_factor);

@@ -117,21 +117,38 @@ void main()
     // mpz_clear(exp);
     // mpz_clear(base);
 
-    // 6. Test for order of a under mod m
-    mpz_t a, m, ans;
-    mpz_init(a);
-    mpz_init(m);
-    mpz_init(ans);
+    // // 6. Test for order of a under mod m
+    // mpz_t a, m, ans;
+    // mpz_init(a);
+    // mpz_init(m);
+    // mpz_init(ans);
+    // char str[1024];
+    // printf("Enter a:");
+    // scanf("%1023s", str);
+    // mpz_set_str(a, str, 10);
+    // printf("Enter m:");
+    // scanf("%1023s", str);
+    // mpz_set_str(m, str, 10);
+    // order_a_mod_m(a, m, ans);
+    // gmp_printf("Ans:%Zd", ans);
+    // mpz_clear(a);
+    // mpz_clear(m);
+    // mpz_clear(ans);
+
+    // 7. factor list test
+    mpz_t n;
+    mpz_t *factors;
     char str[1024];
-    printf("Enter a:");
+    printf("Enter n:");
     scanf("%1023s", str);
-    mpz_set_str(a, str, 10);
-    printf("Enter m:");
-    scanf("%1023s", str);
-    mpz_set_str(m, str, 10);
-    order_a_mod_m(a, m, ans);
-    gmp_printf("Ans:%Zd", ans);
-    mpz_clear(a);
-    mpz_clear(m);
-    mpz_clear(ans);
+    mpz_init(n);
+    mpz_set_str(n, str, 10);
+    int count = 0;
+    factors = factor_list(n, &count);
+    printf("Factors are:%d in count\n", count);
+    for (int i = 0; i < count; i++)
+    {
+        gmp_printf("%Zd\n", factors[i]);
+    }
+    mpz_clear(n);
 }
