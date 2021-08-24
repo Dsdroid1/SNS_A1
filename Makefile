@@ -25,5 +25,8 @@ prg7: prg7.o helpers_gmp.o
 prg8: prg8.o helpers_gmp.o
 	$(CC) -o $@ $^ $(CFLAGS)
 
+prg9: prg9.o helpers_gmp.o
+	$(CC) -o $@ $^ $(CFLAGS)
+
 %.o: %.c
 	$(CC) -c -o $@ $^ $(CFLAGS)

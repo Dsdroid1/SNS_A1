@@ -253,13 +253,15 @@ int chinese_remainder_theorem(int n, mpz_t *m, mpz_t *a, mpz_t x)
     return exists;
 }
 
-void fast_exponent_mod_m(mpz_t base, mpz_t power, mpz_t m, mpz_t result)
+void fast_exponent_mod_m(mpz_t base, mpz_t original_power, mpz_t m, mpz_t result)
 {
     // Works only for positive powers
-    mpz_t remainder, base_power, two;
+    mpz_t remainder, base_power, two, power;
     mpz_init(remainder);
     mpz_init(two);
     mpz_init(base_power);
+    mpz_init(power);
+    mpz_set(power, original_power);
 
     mpz_set_ui(two, 2);
     mpz_set_ui(result, 1);
@@ -305,4 +307,94 @@ void fast_exponent_mod_m(mpz_t base, mpz_t power, mpz_t m, mpz_t result)
     mpz_clear(remainder);
     mpz_clear(two);
     mpz_clear(base_power);
+    mpz_clear(power);
+}
+
+int order_a_mod_m(mpz_t a, mpz_t m, mpz_t h)
+{
+    mpz_t phi, gcd_value;
+    mpz_init(gcd_value);
+    int exists = 1;
+    gcd(a, m, gcd_value);
+    if (mpz_cmp_ui(gcd_value, 1) == 0)
+    {
+        // Get the phi of m
+        mpz_init(phi);
+        eulers_totient_function(m, phi);
+        // DEBUG
+        gmp_printf("Phi of %Zd is %Zd\n", m, phi);
+        // We need to only check all factors of phi for order equation
+        mpz_t factor, root_n, remainder, order_expression_value;
+        mpz_init(factor);
+        mpz_init(root_n);
+        mpz_init(remainder);
+        mpz_init(order_expression_value);
+
+        mpz_set_ui(factor, 1);
+        mpz_sqrt(root_n, m);
+        int found = 0;
+        // For factors from 1 to root_n
+        for (; mpz_cmp(factor, root_n) < 0 && found == 0; mpz_add_ui(factor, factor, 1))
+        {
+
+            mpz_mod(remainder, phi, factor);
+            if (mpz_cmp_ui(remainder, 0) == 0)
+            {
+                // Factor found, check it
+                // DEBUG
+                gmp_printf("Factor:%Zd\n", factor);
+                fast_exponent_mod_m(a, factor, m, order_expression_value);
+                // DEBUG
+                gmp_printf("Order expression value:%Zd\n", order_expression_value);
+                if (mpz_cmp_ui(order_expression_value, 1) == 0)
+                {
+                    found = 1;
+                    exists = 1;
+                    mpz_set(h, factor);
+                }
+            }
+        }
+        // DEBUG
+        printf("First part done\n");
+        mpz_set(factor, root_n);
+        mpz_t inverse_factor;
+        mpz_init(inverse_factor);
+        // For factors from root_n+1 to n
+        for (; mpz_cmp_ui(factor, 0) > 0 && found == 0; mpz_sub_ui(factor, factor, 1))
+        {
+            mpz_mod(remainder, phi, factor);
+            if (mpz_cmp_ui(remainder, 0) == 0)
+            {
+                // Factor found, check it
+                mpz_divexact(inverse_factor, phi, factor);
+                // gmp_printf("%Zd ", inverse_factor);
+                // DEBUG
+                gmp_printf("Factor:%Zd\n", inverse_factor);
+                fast_exponent_mod_m(a, inverse_factor, m, order_expression_value);
+                // DEBUG
+                gmp_printf("Order expression value:%Zd\n", order_expression_value);
+                if (mpz_cmp_ui(order_expression_value, 1) == 0)
+                {
+                    found = 1;
+                    exists = 1;
+                    mpz_set(h, inverse_factor);
+                }
+            }
+        }
+        mpz_clear(inverse_factor);
+
+        mpz_clear(order_expression_value);
+        mpz_clear(factor);
+        mpz_clear(root_n);
+        mpz_clear(remainder);
+        mpz_clear(phi);
+    }
+    else
+    {
+        // Order will not exist as gcd is not 1
+        exists = 0;
+    }
+
+    mpz_clear(gcd_value);
+    return exists;
 }

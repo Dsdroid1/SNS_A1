@@ -94,26 +94,44 @@ void main()
     // chinese_remainder_theorem(n, m, a, x);
     // gmp_printf("%Zd", x);
 
-    // 5. Test for fast_exponent_mod_m
-    mpz_t base, exp, m, results;
-    mpz_init(base);
-    mpz_init(exp);
+    // // 5. Test for fast_exponent_mod_m
+    // mpz_t base, exp, m, results;
+    // mpz_init(base);
+    // mpz_init(exp);
+    // mpz_init(m);
+    // mpz_init(results);
+    // char str[1024];
+    // printf("Enter base:");
+    // scanf("%1023s", str);
+    // mpz_set_str(base, str, 10);
+    // printf("Enter exp:");
+    // scanf("%1023s", str);
+    // mpz_set_str(exp, str, 10);
+    // printf("Enter m:");
+    // scanf("%1023s", str);
+    // mpz_set_str(m, str, 10);
+    // fast_exponent_mod_m(base, exp, m, results);
+    // gmp_printf("\n The exponent is %Zd", results);
+    // mpz_clear(results);
+    // mpz_clear(m);
+    // mpz_clear(exp);
+    // mpz_clear(base);
+
+    // 6. Test for order of a under mod m
+    mpz_t a, m, ans;
+    mpz_init(a);
     mpz_init(m);
-    mpz_init(results);
+    mpz_init(ans);
     char str[1024];
-    printf("Enter base:");
+    printf("Enter a:");
     scanf("%1023s", str);
-    mpz_set_str(base, str, 10);
-    printf("Enter exp:");
-    scanf("%1023s", str);
-    mpz_set_str(exp, str, 10);
+    mpz_set_str(a, str, 10);
     printf("Enter m:");
     scanf("%1023s", str);
     mpz_set_str(m, str, 10);
-    fast_exponent_mod_m(base, exp, m, results);
-    gmp_printf("\n The exponent is %Zd", results);
-    mpz_clear(results);
+    order_a_mod_m(a, m, ans);
+    gmp_printf("Ans:%Zd", ans);
+    mpz_clear(a);
     mpz_clear(m);
-    mpz_clear(exp);
-    mpz_clear(base);
+    mpz_clear(ans);
 }
