@@ -91,90 +91,6 @@ void extended_euclidean_algorithm(mpz_t a_original, mpz_t b_original, mpz_t x, m
 }
 
 // Function to calculate the size of RRSM_number, i.e the euler's totient function
-// DOES NOT WORK CORRECTLY
-// void eulers_totient_function(mpz_t number, mpz_t phi)
-// {
-//     mpz_t n;
-//     mpz_init(n);
-//     mpz_set_ui(phi, 1);
-//     mpz_set(n, number);
-//     mpz_t prime_factor, multiplicity, prime_power_multiplicity_minus_one, prime_factor_minus_one;
-//     int factor_found = 0;
-//     mpz_init(prime_factor);
-//     mpz_init(multiplicity);
-//     mpz_init(prime_factor_minus_one);
-//     mpz_init(prime_power_multiplicity_minus_one);
-//     mpz_set_ui(multiplicity, 0);
-//     mpz_t remainder;
-//     mpz_init(remainder);
-//     // Get multiplicity of 2, if 2 is a factor
-//     mpz_tdiv_r_ui(remainder, n, 2);
-//     while (mpz_cmp_ui(remainder, 0) == 0)
-//     {
-//         mpz_set_ui(prime_factor, 2);
-//         mpz_add_ui(multiplicity, multiplicity, 1);
-//         mpz_divexact_ui(n, n, 2);
-//         mpz_tdiv_r_ui(remainder, n, 2);
-//         factor_found = 1;
-//     }
-//     if (factor_found)
-//     {
-//         mpz_sub_ui(multiplicity, multiplicity, 1);
-//         mpz_pow_ui(prime_power_multiplicity_minus_one, prime_factor, mpz_get_ui(multiplicity));
-//         mpz_mul(phi, phi, prime_power_multiplicity_minus_one);
-//         mpz_set(prime_power_multiplicity_minus_one, prime_factor);
-//         mpz_sub_ui(prime_factor_minus_one, prime_factor_minus_one, 1);
-//         mpz_mul(phi, phi, prime_factor_minus_one);
-//         mpz_set_ui(multiplicity, 0);
-//         factor_found = 0;
-//     }
-//     mpz_t root_n;
-//     mpz_init(root_n);
-//     mpz_sqrt(root_n, n);
-//     mpz_set_ui(prime_factor, 3);
-//     for (; mpz_cmp(prime_factor, root_n) <= 0; mpz_add_ui(prime_factor, prime_factor, 2))
-//     {
-//         mpz_tdiv_r(remainder, n, prime_factor);
-//         if (mpz_cmp(remainder, 0) == 0)
-//         {
-//             factor_found = 1;
-//         }
-//         while (mpz_cmp_ui(remainder, 0) == 0)
-//         {
-//             mpz_add_ui(multiplicity, multiplicity, 1);
-//             mpz_divexact_ui(n, n, 2);
-//             mpz_tdiv_r_ui(remainder, n, 2);
-//         }
-//         if (factor_found)
-//         {
-//             mpz_sub_ui(multiplicity, multiplicity, 1);
-//             // Maybe improve the exponentiation fn?
-//             mpz_pow_ui(prime_power_multiplicity_minus_one, prime_factor, mpz_get_ui(multiplicity));
-//             mpz_mul(phi, phi, prime_power_multiplicity_minus_one);
-//             mpz_set(prime_power_multiplicity_minus_one, prime_factor);
-//             mpz_sub_ui(prime_factor_minus_one, prime_factor_minus_one, 1);
-//             mpz_mul(phi, phi, prime_factor_minus_one);
-//             mpz_set_ui(multiplicity, 0);
-//             factor_found = 0;
-//             mpz_sqrt(root_n, n);
-//         }
-//     }
-//     if (mpz_cmp_ui(n, 2) > 0)
-//     {
-//         mpz_set(prime_factor, n);
-//         mpz_set(prime_factor_minus_one, prime_factor);
-//         mpz_sub_ui(prime_factor_minus_one, prime_factor_minus_one, 1);
-//         mpz_mul(phi, phi, prime_factor_minus_one);
-//     }
-//     mpz_clear(prime_factor);
-//     mpz_clear(prime_factor_minus_one);
-//     mpz_clear(prime_power_multiplicity_minus_one);
-//     mpz_clear(root_n);
-//     mpz_clear(n);
-//     mpz_clear(multiplicity);
-//     // Yet to be tested
-// }
-
 void eulers_totient_function(mpz_t number, mpz_t phi)
 {
     mpz_t n, factor, remainder, root_n, factor_power_multiplicity_minus_one, factor_minus_one;
@@ -335,4 +251,58 @@ int chinese_remainder_theorem(int n, mpz_t *m, mpz_t *a, mpz_t x)
     }
     mpz_clear(M);
     return exists;
+}
+
+void fast_exponent_mod_m(mpz_t base, mpz_t power, mpz_t m, mpz_t result)
+{
+    // Works only for positive powers
+    mpz_t remainder, base_power, two;
+    mpz_init(remainder);
+    mpz_init(two);
+    mpz_init(base_power);
+
+    mpz_set_ui(two, 2);
+    mpz_set_ui(result, 1);
+
+    // mpz_mod(remainder, power, two);
+    // // DEBUG
+    // gmp_printf("\nRemainder:%Zd", remainder);
+    // if (mpz_cmp_ui(remainder, 1) == 0)
+    // {
+    //     mpz_add_ui(result, result, 1);
+    //     // DEBUG
+    //     gmp_printf("\nResult:%Zd ", result);
+    // }
+    // mpz_fdiv_q(power, power, two);
+    // // DEBUG
+    // gmp_printf("\nPower:%Zd", power);
+    // mpz_set(base_power, base);
+    mpz_mod(base_power, base, m);
+    // // DEBUG
+    // gmp_printf("\nBase raised value:%Zd", base_power);
+
+    while (mpz_cmp_ui(power, 0) > 0)
+    {
+        mpz_mod(remainder, power, two);
+        // // DEBUG
+        // gmp_printf("\nRemainder:%Zd", remainder);
+        if (mpz_cmp_ui(remainder, 1) == 0)
+        {
+            mpz_mul(result, result, base_power);
+            mpz_mod(result, result, m);
+            // // DEBUG
+            // gmp_printf("\nResult:%Zd ", result);
+        }
+        mpz_mul(base_power, base_power, base_power);
+        mpz_mod(base_power, base_power, m);
+        mpz_fdiv_q(power, power, two);
+        // // DEBUG
+        // gmp_printf("\nPower:%Zd", power);
+        // // DEBUG
+        // gmp_printf("\nBase raised value:%Zd", base_power);
+    }
+
+    mpz_clear(remainder);
+    mpz_clear(two);
+    mpz_clear(base_power);
 }

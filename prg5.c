@@ -44,7 +44,8 @@ void main(int argc, char *argv[])
         else
         {
             // Fermats theorem is not applicable here
-            mpz_powm(ans, a, x, n);
+            //mpz_powm(ans, a, x, n);
+            fast_exponent_mod_m(a, x, n, ans);
             gmp_printf("\nFinal Ans(Normal calculation as fermats theorem is not applicable here): %Zd", ans);
         }
         mpz_clear(q);

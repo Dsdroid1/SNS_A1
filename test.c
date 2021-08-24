@@ -71,26 +71,49 @@ void main()
     // mpz_clear(n);
     // mpz_clear(phi);
 
-    // 4. Test for CRT
-    int n;
-    printf("Enter n:");
-    scanf("%d", &n);
-    mpz_t *a, *m;
-    a = (mpz_t *)malloc(n * sizeof(mpz_t));
-    m = (mpz_t *)malloc(n * sizeof(mpz_t));
-    printf("Enter all a-m pairs(one by one): ");
+    // // 4. Test for CRT
+    // int n;
+    // printf("Enter n:");
+    // scanf("%d", &n);
+    // mpz_t *a, *m;
+    // a = (mpz_t *)malloc(n * sizeof(mpz_t));
+    // m = (mpz_t *)malloc(n * sizeof(mpz_t));
+    // printf("Enter all a-m pairs(one by one): ");
+    // char str[1024];
+    // for (int i = 0; i < n; i++)
+    // {
+    //     mpz_init(a[i]);
+    //     scanf("%1023s", str);
+    //     mpz_set_str(a[i], str, 10);
+    //     mpz_init(m[i]);
+    //     scanf("%1023s", str);
+    //     mpz_set_str(m[i], str, 10);
+    // }
+    // mpz_t x;
+    // mpz_init(x);
+    // chinese_remainder_theorem(n, m, a, x);
+    // gmp_printf("%Zd", x);
+
+    // 5. Test for fast_exponent_mod_m
+    mpz_t base, exp, m, results;
+    mpz_init(base);
+    mpz_init(exp);
+    mpz_init(m);
+    mpz_init(results);
     char str[1024];
-    for (int i = 0; i < n; i++)
-    {
-        mpz_init(a[i]);
-        scanf("%1023s", str);
-        mpz_set_str(a[i], str, 10);
-        mpz_init(m[i]);
-        scanf("%1023s", str);
-        mpz_set_str(m[i], str, 10);
-    }
-    mpz_t x;
-    mpz_init(x);
-    chinese_remainder_theorem(n, m, a, x);
-    gmp_printf("%Zd", x);
+    printf("Enter base:");
+    scanf("%1023s", str);
+    mpz_set_str(base, str, 10);
+    printf("Enter exp:");
+    scanf("%1023s", str);
+    mpz_set_str(exp, str, 10);
+    printf("Enter m:");
+    scanf("%1023s", str);
+    mpz_set_str(m, str, 10);
+    fast_exponent_mod_m(base, exp, m, results);
+    gmp_printf("\n The exponent is %Zd", results);
+    mpz_clear(results);
+    mpz_clear(m);
+    mpz_clear(exp);
+    mpz_clear(base);
 }
