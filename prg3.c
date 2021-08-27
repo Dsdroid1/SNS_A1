@@ -1,3 +1,4 @@
+// 3.	[Fundamental Theorem of Arithmetic] Given any integer output the product of primes, in ascending order.
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmp.h>

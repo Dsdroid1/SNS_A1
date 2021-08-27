@@ -1,3 +1,4 @@
+// 1.	Given 𝑛, {𝑚𝑖}, 𝑖=1 𝑛 integers, print all common divisors of (𝑚1, 𝑚2,… , 𝑚𝑛 ).
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmp.h>
@@ -12,7 +13,7 @@ void main(int argc, char *argv[])
     mpz_init(gcd_value);
     if (argc <= 2)
     {
-        printf("Arguments not supplied in correct format!");
+        printf("Invalid Arguments!\n");
     }
     else
     {
@@ -20,7 +21,7 @@ void main(int argc, char *argv[])
         // G Calculate the running gcd of all these 'n' numbers
         if (argc != n + 2)
         {
-            printf("Invalid Arguments!");
+            printf("Invalid Arguments!\n");
         }
         else
         {

@@ -11,6 +11,6 @@ int inverse_under_mod_m(mpz_t a, mpz_t m, mpz_t a_inverse);
 int chinese_remainder_theorem(int n, mpz_t *m, mpz_t *a, mpz_t x);
 void fast_exponent_mod_m(mpz_t base, mpz_t original_power, mpz_t m, mpz_t result);
 int order_a_mod_m(mpz_t a, mpz_t m, mpz_t h);
-mpz_t *factor_list(mpz_t n, int *no_of_factors);
+mpz_t *factor_list(mpz_t n, long long int *no_of_factors);
 
 #endif

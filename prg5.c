@@ -1,3 +1,4 @@
+// 5.	Given 𝑎, 𝑥 and 𝑛, output 𝑎^𝑥(𝑚𝑜𝑑 𝑛). Use Fermat’s theorem concept. Also print intermediate equations while computing, in any readable form.
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmp.h>
@@ -35,18 +36,18 @@ void main(int argc, char *argv[])
             // We know a^phi(n) mod n is 1
             mpz_fdiv_qr(q, r, x, phi_of_n);
             // Hence calculate only a^r mod n
-            mpz_powm(ans, a, r, n);
-            gmp_printf("%Zd ^ %Zd (mod %Zd) = %Zd ^ (%Zd*[%Zd] + %Zd) (mod %Zd)", a, x, n, a, q, phi_of_n, r, n);
-            gmp_printf(" = [%Zd ^ (%Zd*[%Zd]) (mod %Zd) * %Zd ^ %Zd (mod %Zd)] (mod %Zd)", a, q, phi_of_n, n, a, r, n, n);
-            gmp_printf(" = 1 * %Zd = %Zd", ans, ans);
-            gmp_printf("\nFinal Ans: %Zd", ans);
+            fast_exponent_mod_m(a, x, n, ans);
+            // gmp_printf("%Zd ^ %Zd (mod %Zd) = %Zd ^ (%Zd*[%Zd] + %Zd) (mod %Zd)", a, x, n, a, q, phi_of_n, r, n);
+            // gmp_printf(" = [%Zd ^ (%Zd*[%Zd]) (mod %Zd) * %Zd ^ %Zd (mod %Zd)] (mod %Zd)", a, q, phi_of_n, n, a, r, n, n);
+            // gmp_printf(" = 1 * %Zd = %Zd", ans, ans);
+            gmp_printf("%Zd", ans);
         }
         else
         {
             // Fermats theorem is not applicable here
             //mpz_powm(ans, a, x, n);
             fast_exponent_mod_m(a, x, n, ans);
-            gmp_printf("\nFinal Ans(Normal calculation as fermats theorem is not applicable here): %Zd", ans);
+            gmp_printf("%Zd", ans);
         }
         mpz_clear(q);
         mpz_clear(r);

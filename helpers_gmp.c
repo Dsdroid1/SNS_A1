@@ -322,7 +322,7 @@ int order_a_mod_m(mpz_t a, mpz_t m, mpz_t h)
         mpz_init(phi);
         eulers_totient_function(m, phi);
         // DEBUG
-        gmp_printf("Phi of %Zd is %Zd\n", m, phi);
+        // gmp_printf("Phi of %Zd is %Zd\n", m, phi);
         // We need to only check all factors of phi for order equation
         mpz_t factor, root_n, remainder, order_expression_value;
         mpz_init(factor);
@@ -342,10 +342,10 @@ int order_a_mod_m(mpz_t a, mpz_t m, mpz_t h)
             {
                 // Factor found, check it
                 // DEBUG
-                gmp_printf("Factor:%Zd\n", factor);
+                // gmp_printf("Factor:%Zd\n", factor);
                 fast_exponent_mod_m(a, factor, m, order_expression_value);
                 // DEBUG
-                gmp_printf("Order expression value:%Zd\n", order_expression_value);
+                // gmp_printf("Order expression value:%Zd\n", order_expression_value);
                 if (mpz_cmp_ui(order_expression_value, 1) == 0)
                 {
                     found = 1;
@@ -355,7 +355,7 @@ int order_a_mod_m(mpz_t a, mpz_t m, mpz_t h)
             }
         }
         // DEBUG
-        printf("First part done\n");
+        // printf("First part done\n");
         mpz_set(factor, root_n);
         mpz_t inverse_factor;
         mpz_init(inverse_factor);
@@ -369,10 +369,10 @@ int order_a_mod_m(mpz_t a, mpz_t m, mpz_t h)
                 mpz_divexact(inverse_factor, phi, factor);
                 // gmp_printf("%Zd ", inverse_factor);
                 // DEBUG
-                gmp_printf("Factor:%Zd\n", inverse_factor);
+                // gmp_printf("Factor:%Zd\n", inverse_factor);
                 fast_exponent_mod_m(a, inverse_factor, m, order_expression_value);
                 // DEBUG
-                gmp_printf("Order expression value:%Zd\n", order_expression_value);
+                // gmp_printf("Order expression value:%Zd\n", order_expression_value);
                 if (mpz_cmp_ui(order_expression_value, 1) == 0)
                 {
                     found = 1;
@@ -399,7 +399,7 @@ int order_a_mod_m(mpz_t a, mpz_t m, mpz_t h)
     return exists;
 }
 
-mpz_t *factor_list(mpz_t n, int *no_of_factors)
+mpz_t *factor_list(mpz_t n, long long int *no_of_factors)
 {
     mpz_t *list;
 

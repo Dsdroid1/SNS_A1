@@ -1,3 +1,4 @@
+// 4.	[Reduced Residue System Modulo m] Given an integer m, output the RRSM_m set of integers. And also output the value of 𝜑(𝑚)
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmp.h>
@@ -32,7 +33,8 @@ void main(int argc, char *argv[])
                     gmp_printf("%Zd ", i);
                 }
             }
-            gmp_printf("\nPhi = %Zd ", rrsm_size);
+            // gmp_printf("\nPhi = %Zd ", rrsm_size);
+            gmp_printf("\n%Zd", rrsm_size);
         }
         mpz_clear(num);
         mpz_clear(rrsm_size);

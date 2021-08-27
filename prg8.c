@@ -1,3 +1,4 @@
+// 8.	[Solution to system of congruences] Given set of integers {(𝑎𝑖 , 𝑏𝑖 , 𝑚𝑖 )}𝑖=1 to 𝑛 , print whether there exist common solution 𝑥 which satisfy the system of congruences of the form 𝑎𝑖𝑥 ≡ 𝑏𝑖 (𝑚𝑜𝑑 𝑚𝑖 ). If exist then print all the solutions. Use user defined CRT function
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmp.h>

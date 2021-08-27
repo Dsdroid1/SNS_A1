@@ -1,3 +1,4 @@
+// 2.	Extended Euclidean algorithm to output 𝑥, 𝑦 when 𝑎, 𝑏 is given, such 𝑎𝑥 + 𝑏𝑦 = 𝑔𝑐𝑑(𝑎, 𝑏)
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmp.h>

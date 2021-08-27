@@ -1,3 +1,4 @@
+// 6.	Given a and m, first print whether multiplicative inverse of 𝑎 (𝑚𝑜𝑑 𝑚) exist Y/N then output its inverse, if exist.
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmp.h>

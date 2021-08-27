@@ -1,3 +1,4 @@
+// 7.	[Solutions of congruence] Given a, b and m, print whether solution to the congruence 𝑎𝑥 ≡ 𝑏(𝑚𝑜𝑑𝑚) exist Y/N. If Yes then output the number of solutions and all the solutions.
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmp.h>
@@ -50,7 +51,7 @@ void main(int argc, char *argv[])
             mpz_init(i);
             // Here gcd(mu,alpha)=1=> inverse exists
             inverse_under_mod_m(alpha, mu, alpha_inverse);
-
+            printf("Y ");
             // The first solution is beta*alpha_inverse
             mpz_mul(solutions, beta, alpha_inverse);
             mpz_mod(solutions, solutions, mu);
