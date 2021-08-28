@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <gmp.h>
-#include "helpers_gmp.h"
 
 void main(int argc, char *argv[])
 {
